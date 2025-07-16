@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #c084fc;
+      --secondary-color: #d8b4fe;
+      --success-color: #34d399;
+      --danger-color: #f87171;
+      --warning-color: #fbbf24;
+      --light-bg: #fefefe;
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --border-radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-container {
+      background: var(--light-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      margin: 2rem auto;
+      max-width: 1000px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+
+    .content-wrapper {
+      padding: 3rem 2rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .nav-card {
+      background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
+      border: 2px solid #e9d5ff;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    }
+
+    .nav-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(192, 132, 252, 0.2);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-card .icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-card:hover .icon {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(192, 132, 252, 0.4);
+    }
+
+    .nav-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .nav-card p {
+      color: #6b7280;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-section h2 {
+      color: #374151;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-section p {
+      color: #6b7280;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .nav-card:nth-child(1) { animation-delay: 0.1s; }
+    .nav-card:nth-child(2) { animation-delay: 0.2s; }
+    .nav-card:nth-child(3) { animation-delay: 0.3s; }
+    .nav-card:nth-child(4) { animation-delay: 0.4s; }
+    .nav-card:nth-child(5) { animation-delay: 0.5s; }
+    .nav-card:nth-child(6) { animation-delay: 0.6s; }
+
+    @media (max-width: 768px) {
+      .nav-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  <!-- Header -->
+  <div class="header">
+    <h1><i class="fas fa-tachometer-alt me-3"></i>Management Dashboard</h1>
+    <p>Central hub for managing your content automation system</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content-wrapper">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h2>Welcome to Your Control Center</h2>
+      <p>Access all management tools and monitor your content automation workflow from this central dashboard. Click on any section below to manage your system components.</p>
+    </div>
+
+
+
+    <!-- Navigation Grid -->
+    <div class="nav-grid">
+      <a href="/apis-list" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-cogs"></i>
+        </div>
+        <h3>API Manager</h3>
+        <p>Configure and manage your API endpoints, authentication tokens, and service integrations for seamless data exchange.</p>
+      </a>
+
+      <a href="/source_sites" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-rss"></i>
+        </div>
+        <h3>Source Sites</h3>
+        <p>Manage your content sources, RSS feeds, and website crawlers. Configure filters and monitoring settings.</p>
+      </a>
+
+      <a href="/channels-page" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-broadcast-tower"></i>
+        </div>
+        <h3>Channels</h3>
+        <p>Set up and manage your communication channels, broadcast settings, and audience targeting configurations.</p>
+      </a>
+
+      <a href="/posting_history_page" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-history"></i>
+        </div>
+        <h3>Posting History</h3>
+        <p>Track your publishing activity, view analytics, and monitor the performance of your automated content distribution.</p>
+      </a>
+
+      <a href="/cookies-page" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-cookie-bite"></i>
+        </div>
+        <h3>Cookie Manager</h3>
+        <p>Manage browser cookies, session data, and authentication persistence for your web automation tasks.</p>
+      </a>
+
+      <a href="/category_keywords" class="nav-card">
+        <div class="icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h3>Categories</h3>
+        <p>Organize your content with categories and keywords. Set up quota management and content classification rules.</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

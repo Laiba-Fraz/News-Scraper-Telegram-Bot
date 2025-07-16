@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Cookies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #c084fc;
+      --secondary-color: #d8b4fe;
+      --success-color: #34d399;
+      --danger-color: #f87171;
+      --warning-color: #fbbf24;
+      --light-bg: #fefefe;
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+      --border-radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-container {
+      background: var(--light-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      margin: 2rem auto;
+      max-width: 1200px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .content-wrapper {
+      padding: 2rem;
+    }
+
+    .add-form {
+      background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
+      border: 2px solid #e9d5ff;
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .form-control {
+      border: 2px solid #e9d5ff;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(192, 132, 252, 0.15);
+    }
+
+    .form-check-input {
+      border: 2px solid #e9d5ff;
+      border-radius: 4px;
+    }
+
+    .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary-custom {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      border: none;
+      border-radius: 25px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(192, 132, 252, 0.4);
+    }
+
+    .table-container {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .table th {
+      background: linear-gradient(135deg, #fefefe 0%, #faf5ff 100%);
+      border: none;
+      font-weight: 600;
+      color: #374151;
+      padding: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .table td {
+      padding: 0.75rem 1rem;
+      border-color: #f5f3ff;
+      font-size: 0.875rem;
+    }
+
+    .btn-action {
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Custom Modal Styles */
+    .custom-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1050;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content-custom {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .custom-modal.show .modal-content-custom {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+    }
+
+    .modal-icon.danger {
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--danger-color);
+    }
+
+    .modal-icon.success {
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--success-color);
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1060;
+    }
+
+    .toast-custom {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 1rem 1.5rem;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid;
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+    }
+
+    .toast-custom.show {
+      transform: translateX(0);
+    }
+
+    .toast-custom.success {
+      border-left-color: var(--success-color);
+    }
+
+    .toast-custom.error {
+      border-left-color: var(--danger-color);
+    }
+
+    .toast-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    .toast-icon.success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .toast-icon.error {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    @keyframes slideInFromRight {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeInScale {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .animate-in {
+      animation: fadeInScale 0.3s ease-out;
+    }
+
+    .form-row-custom {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      gap: 0.75rem;
+      align-items: end;
+    }
+
+    @media (max-width: 768px) {
+      .form-row-custom {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="mb-0"><i class="fas fa-cookie-bite me-3"></i>Cookie Manager</h1>
+    <p class="mb-0 mt-2 opacity-75">Manage browser cookies and session data</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content-wrapper">
+    <!-- Add Cookie Form -->
+    <div class="add-form">
+      <div class="d-flex align-items-center mb-3">
+        <i class="fas fa-plus-circle text-primary me-2"></i>
+        <h5 class="mb-0">Add New Cookie</h5>
+      </div>
+      
+      <form id="addCookieForm">
+        <div class="form-row-custom mb-3">
+          <div>
+            <label class="form-label text-muted small">Name</label>
+            <input type="text" class="form-control form-control-sm" name="name" placeholder="Cookie name" required>
+          </div>
+          <div>
+            <label class="form-label text-muted small">Value</label>
+            <input type="text" class="form-control form-control-sm" name="value" placeholder="Cookie value" required>
+          </div>
+          <div>
+            <label class="form-label text-muted small">Domain</label>
+            <input type="text" class="form-control form-control-sm" name="domain" placeholder=".example.com" required>
+          </div>
+          <div>
+            <label class="form-label text-muted small">Path</label>
+            <input type="text" class="form-control form-control-sm" name="path" placeholder="/" required>
+          </div>
+          <div>
+            <label class="form-label text-muted small">Expiry</label>
+            <input type="number" class="form-control form-control-sm" name="expiry" placeholder="Timestamp">
+          </div>
+          <div>
+            <label class="form-label text-muted small">Secure</label>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" name="secure" id="secureCheck">
+              <label class="form-check-label small" for="secureCheck">HTTPS Only</label>
+            </div>
+          </div>
+          <div>
+            <label class="form-label text-muted small">HTTP Only</label>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" name="http_only" id="httpOnlyCheck">
+              <label class="form-check-label small" for="httpOnlyCheck">Server Only</label>
+            </div>
+          </div>
+          <div>
+            <label class="form-label text-muted small">&nbsp;</label>
+            <button type="submit" class="btn btn-primary-custom w-100">
+              <i class="fas fa-plus me-2"></i>Add Cookie
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0" id="cookieTable">
+          <thead>
+            <tr>
+              <th><i class="fas fa-hashtag me-2"></i>ID</th>
+              <th><i class="fas fa-tag me-2"></i>Name</th>
+              <th><i class="fas fa-edit me-2"></i>Value</th>
+              <th><i class="fas fa-globe me-2"></i>Domain</th>
+              <th><i class="fas fa-route me-2"></i>Path</th>
+              <th><i class="fas fa-clock me-2"></i>Expiry</th>
+              <th><i class="fas fa-shield-alt me-2"></i>Secure</th>
+              <th><i class="fas fa-server me-2"></i>HTTP Only</th>
+              <th style="width: 200px;"><i class="fas fa-cogs me-2"></i>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cookieTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div class="custom-modal" id="confirmModal">
+  <div class="modal-content-custom">
+    <div class="modal-icon danger">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h5 class="text-center mb-3" id="confirmTitle">Confirm Action</h5>
+    <p class="text-center text-muted mb-4" id="confirmMessage">Are you sure you want to proceed?</p>
+    <div class="d-flex gap-2 justify-content-center">
+      <button class="btn btn-secondary" onclick="hideConfirmModal()">Cancel</button>
+      <button class="btn btn-danger" id="confirmBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const API_BASE = "/cookies";
+  let confirmCallback = null;
+
+  // Custom Toast Notifications
+  function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast-custom ${type}`;
+    
+    const icon = type === 'success' ? 'fas fa-check' : 'fas fa-times';
+    
+    toast.innerHTML = `
+      <div class="d-flex align-items-center">
+        <span class="toast-icon ${type}">
+          <i class="${icon}"></i>
+        </span>
+        <span>${message}</span>
+      </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Auto remove
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // Custom Confirmation Modal
+  function showConfirmModal(title, message, callback) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmModal').style.display = 'flex';
+    
+    setTimeout(() => {
+      document.getElementById('confirmModal').classList.add('show');
+    }, 10);
+    
+    confirmCallback = callback;
+  }
+
+  function hideConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+    confirmCallback = null;
+  }
+
+  document.getElementById('confirmBtn').onclick = function() {
+    if (confirmCallback) {
+      confirmCallback();
+      hideConfirmModal();
+    }
+  };
+
+  // Close modal on background click
+  document.getElementById('confirmModal').onclick = function(e) {
+    if (e.target === this) {
+      hideConfirmModal();
+    }
+  };
+
+  async function loadCookies() {
+    try {
+      const res = await fetch(API_BASE);
+      const data = await res.json();
+      const tbody = document.getElementById("cookieTableBody");
+      tbody.innerHTML = "";
+
+      data.forEach(cookie => {
+        const row = document.createElement("tr");
+        row.className = 'animate-in';
+        row.innerHTML = `
+          <td class="text-muted small">${cookie.id.slice(0, 8)}...</td>
+          <td><input type="text" class="form-control form-control-sm" value="${cookie.name}" data-field="name" disabled></td>
+          <td><input type="text" class="form-control form-control-sm" value="${cookie.value}" data-field="value" disabled></td>
+          <td><input type="text" class="form-control form-control-sm" value="${cookie.domain}" data-field="domain" disabled></td>
+          <td><input type="text" class="form-control form-control-sm" value="${cookie.path}" data-field="path" disabled></td>
+          <td><input type="number" class="form-control form-control-sm" value="${cookie.expiry || ''}" data-field="expiry" disabled></td>
+          <td class="text-center"><input type="checkbox" class="form-check-input" ${cookie.secure ? 'checked' : ''} data-field="secure" disabled></td>
+          <td class="text-center"><input type="checkbox" class="form-check-input" ${cookie.http_only ? 'checked' : ''} data-field="http_only" disabled></td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary btn-action" onclick="editRow(this)">
+                <i class="fas fa-edit me-1"></i>Edit
+              </button>
+              <button class="btn btn-sm btn-success btn-action d-none" onclick="saveRow(this, '${cookie.id}')">
+                <i class="fas fa-save me-1"></i>Save
+              </button>
+              <button class="btn btn-sm btn-secondary btn-action d-none" onclick="cancelEdit(this)">
+                <i class="fas fa-times me-1"></i>Cancel
+              </button>
+              <button class="btn btn-sm btn-danger btn-action" onclick="confirmDelete('${cookie.id}', '${cookie.name}')">
+                <i class="fas fa-trash me-1"></i>Delete
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    } catch (error) {
+      showToast('Failed to load cookies', 'error');
+    }
+  }
+
+  document.getElementById("addCookieForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+    submitBtn.disabled = true;
+
+    const body = {
+      id: crypto.randomUUID(),
+      name: form.name.value,
+      value: form.value.value,
+      domain: form.domain.value,
+      path: form.path.value,
+      expiry: form.expiry.value ? parseInt(form.expiry.value) : null,
+      secure: form.secure.checked,
+      http_only: form.http_only.checked
+    };
+
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        form.reset();
+        showToast('Cookie added successfully!', 'success');
+        await loadCookies();
+      } else {
+        showToast('Failed to add cookie', 'error');
+      }
+    } catch (error) {
+      showToast('Error adding cookie', 'error');
+    } finally {
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+
+  function editRow(btn) {
+    const row = btn.closest("tr");
+    row.querySelectorAll("input").forEach(input => {
+      input.disabled = false;
+      input.style.backgroundColor = '#fff';
+    });
+    
+    btn.classList.add("d-none");
+    btn.nextElementSibling.classList.remove("d-none");       // Save
+    btn.nextElementSibling.nextElementSibling.classList.remove("d-none"); // Cancel
+  }
+
+  function cancelEdit(btn) {
+    loadCookies();
+  }
+
+  async function saveRow(btn, id) {
+    const row = btn.closest("tr");
+    const inputs = row.querySelectorAll("input");
+    const body = { id };
+    
+    inputs.forEach(input => {
+      const key = input.dataset.field;
+      if (key === "secure" || key === "http_only") {
+        body[key] = input.checked;
+      } else if (key === "expiry") {
+        body[key] = input.value === "" ? null : parseInt(input.value);
+      } else {
+        body[key] = input.value;
+      }
+    });
+
+    try {
+      const res = await fetch(`${API_BASE}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (res.ok) {
+        showToast('Cookie updated successfully!', 'success');
+        await loadCookies();
+      } else {
+        showToast('Failed to update cookie', 'error');
+      }
+    } catch (error) {
+      showToast('Error updating cookie', 'error');
+    }
+  }
+
+  function confirmDelete(id, cookieName) {
+    showConfirmModal(
+      'Delete Cookie',
+      `Are you sure you want to delete the cookie "${cookieName}"? This action cannot be undone.`,
+      () => deleteCookie(id)
+    );
+  }
+
+  async function deleteCookie(id) {
+    try {
+      const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        showToast('Cookie deleted successfully!', 'success');
+        await loadCookies();
+      } else {
+        showToast('Failed to delete cookie', 'error');
+      }
+    } catch (error) {
+      showToast('Error deleting cookie', 'error');
+    }
+  }
+
+  // Initial load
+  loadCookies();
+</script>
+</body>
+</html>
