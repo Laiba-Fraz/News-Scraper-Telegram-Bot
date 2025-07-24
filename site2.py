@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from db_handler import insert_article
-from db_handler import get_filters_for_url, get_categories_and_keywords  # Assuming you have a function like this
+from db_handler import get_filters_for_url, get_categories_and_keywords  
 
 def categorize_article(title, content):
     # Get categories and keywords dynamically from the database
@@ -77,17 +77,6 @@ def scrape_site2():
                     description = "\n\n".join(full_paragraphs)
         except Exception as e:
             print(f"Error fetching article content: {e}")
-        # # Description from full article
-        # description = "No description available"
-        # try:
-        #     article_response = requests.get(full_url)
-        #     if article_response.status_code == 200:
-        #         article_soup = BeautifulSoup(article_response.text, "html.parser")
-        #         desc_tag = article_soup.find("p", class_="font-meta-serif-pro")
-        #         if desc_tag:
-        #             description = desc_tag.get_text(strip=True)
-        # except Exception as e:
-        #     print(f"Error fetching article content: {e}")
 
         # Debug print
         print(f"Title: {title}")
@@ -97,15 +86,15 @@ def scrape_site2():
         print('-' * 50)
 
         # Get the category for the article based on keywords
-        category = categorize_article(title, description)  # Categorize based on title and description
-        print(f"Category assigned: {category}")  # Debug print to verify category assignment
+        category = categorize_article(title, description)  
+        print(f"Category assigned: {category}") 
 
         article_data = {
             'title': title,
             'timestamp': timestamp,
             'url': full_url,
-            'content': description,  # ✅ use 'content' as the correct key
-            'category': category  # Add category here
+            'content': description,  
+            'category': category 
         }
 
         inserted = insert_article(article_data)
@@ -116,10 +105,10 @@ def scrape_site2():
                 'url': full_url,
                 'timestamp': timestamp,
                 'content': description,
-                'category': category,  # Include category in the inserted article data
+                'category': category, 
                 'base_url': "https://decrypt.co/news"
             })
-            break
+            # break
 
     return inserted_articles
 

@@ -15,13 +15,6 @@ class SourceSiteCreate(BaseModel):
 def get_all_sites():
     return crud.get_all_source_sites()
 
-# @router.post("/source-sites")
-# def create_site(site: SourceSiteCreate):
-#     new_site = crud.create_source_site(site)
-#     if not new_site:
-#         raise HTTPException(status_code=500, detail="Failed to create site")
-#     return new_site
-
 @router.put("/source-sites/{site_id}")
 def update_site(site_id: int, site: SourceSiteCreate):
     updated = crud.update_source_site(
@@ -41,3 +34,5 @@ def delete_site(site_id: int):
     if not deleted:
         raise HTTPException(status_code=404, detail="Site not found or delete failed")
     return {"message": "Site deleted"}
+
+

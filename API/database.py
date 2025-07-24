@@ -1,6 +1,12 @@
+import os
+from dotenv import load_dotenv
 from supabase import create_client
 
-SUPABASE_URL = "https://wnueyrkedgvddmpxiqol.supabase.co"
-SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudWV5cmtlZGd2ZGRtcHhpcW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5MzU5MDMsImV4cCI6MjA2NDUxMTkwM30.23nMoIlF89fC2XYzdVGCeiZLHgLrvDFjkILdE75_Lmw"
+# Load the .env file, with path correction
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../.env'))  # Go one directory up to find the .env file
+
+# Fetch environment variables
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_API_KEY = os.getenv("SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_API_KEY)

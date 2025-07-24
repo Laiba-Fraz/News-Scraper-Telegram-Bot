@@ -8,7 +8,7 @@ router = APIRouter()
 class ChannelSchema(BaseModel):
     name: str
     language: Optional[str] = None
-    channel_url: Optional[str] = None  # ✅ added field
+    channel_url: Optional[str] = None  
     is_active: bool = True
 
 @router.get("/channels")
@@ -28,7 +28,7 @@ def update_channel(channel_id: int, channel: ChannelSchema):
         channel_id,
         name=channel.name,
         language=channel.language,
-        channel_url=channel.channel_url,  # ✅ pass it to the update
+        channel_url=channel.channel_url,  
         is_active=channel.is_active
     )
     if not updated:

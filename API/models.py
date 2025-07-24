@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from .database import Base
+from sqlalchemy.dialects.postgresql import UUID, BIGINT
+from sqlalchemy.sql import func
 
 class API(Base):
     __tablename__ = "apis"
@@ -15,7 +17,7 @@ class SourceSite(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     base_url = Column(String, nullable=False)
-    filters = Column(String, nullable=True)  # Optional comma-separated filters
+    filters = Column(String, nullable=True)  
     is_active = Column(Boolean, default=True)
 
 class Channel(Base):
@@ -25,7 +27,7 @@ class Channel(Base):
     name = Column(String, nullable=False)
     language = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
-    channel_url = Column(String, nullable=True)  # ✅ New field
+    channel_url = Column(String, nullable=True)  
 
 class PostingHistory(Base):
     __tablename__ = "posting_history"
@@ -37,12 +39,9 @@ class PostingHistory(Base):
     channel_id = Column(Integer, ForeignKey("channels.id", ondelete="CASCADE"), nullable=False)
     channel_name = Column(String, nullable=True)  # Store channel name
     posted_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    #content_sent = Column(String, nullable=True)
-    # New Columns to store article title and channel name
    
 
-from sqlalchemy.dialects.postgresql import UUID, BIGINT
-from sqlalchemy.sql import func
+
 
 class TelegramCookie(Base):
     __tablename__ = "telegram_cookies"
@@ -64,7 +63,7 @@ class CategoryKeywords(Base):
     id = Column(Integer, primary_key=True, index=True)
     category = Column(String, nullable=False)
     keywords = Column(String, nullable=False)
-    created_at = Column(DateTime, server_default=func.now())  # Add this - it exists in your DB
+    created_at = Column(DateTime, server_default=func.now()) 
 
 class CategoryArticleCount(Base):
     __tablename__ = "category_article_count"
@@ -74,4 +73,4 @@ class CategoryArticleCount(Base):
     article_count = Column(Integer, default=0, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
-    quota_percentage = Column(Integer, default=0, nullable=False)  # This stays here - correct!
+    quota_percentage = Column(Integer, default=0, nullable=False)  

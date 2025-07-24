@@ -19,21 +19,6 @@ app.include_router(cookies.router)
 app.include_router(category_keywords.router)
 
 
-
-# from fastapi.middleware.cors import CORSMiddleware
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # allow all for now; you can restrict later
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-
-# Serve static files like CSS/JS from API/static folder
-#app.mount("/static", StaticFiles(directory="API/static"), name="static")
-
 app.include_router(source_sites.router)
 
 class ApiIn(BaseModel):
@@ -55,26 +40,19 @@ async def read_index():
 @app.get("/apis-list", response_class=HTMLResponse)
 async def get_apis_page():
     try:
-        apis_page_path = Path(__file__).parent / "apis.html"  # Adjust the path if needed
-        return apis_page_path.read_text()  # Serve the HTML content of apis.html
+        apis_page_path = Path(__file__).parent / "apis.html"  
+        return apis_page_path.read_text()  
     except Exception as e:
         print("Error in GET:", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.get("/apis-data")
 def get_apis_list():
-    apis = crud.get_all_apis()  # Fetch the API data from the database
+    apis = crud.get_all_apis()  
     if not apis:
         raise HTTPException(status_code=404, detail="No APIs found")
     return apis
 
-
-# @app.post("/apis-data")
-# def create_api(api: ApiIn):
-#     new_api = crud.create_api(api)
-#     if new_api:
-#         return new_api
-#     raise HTTPException(status_code=400, detail="Failed to create API record")
 
 @app.put("/apis-data/{api_id}")
 def update_api(api_id: int, api: ApiUpdate):

@@ -5,10 +5,10 @@ from selenium.webdriver.common.by import By
 import feedparser
 from bs4 import BeautifulSoup
 import time
-from db_handler import insert_article, get_categories_and_keywords  # Ensure 'get_categories_and_keywords' is in db_handler
+from db_handler import insert_article, get_categories_and_keywords 
 from telegram_selenium_sender import send_telegram_message_selenium
 
-# Modify the categorize_article function to get categories dynamically from the database
+
 def categorize_article(title, content):
     # Get categories and keywords dynamically from the database
     categories = get_categories_and_keywords()
@@ -83,7 +83,7 @@ def scrape_site1(base_url='https://cointelegraph.com'):
             'author': author,
             'content': full_content,
             'base_url': "https://cointelegraph.com",
-            'category': category  # Add the category here
+            'category': category  
         }
 
         # Debug print to check the scraped article data before passing it to insert_article
@@ -99,7 +99,7 @@ def scrape_site1(base_url='https://cointelegraph.com'):
         if inserted:
             article_data["id"] = inserted["id"]
             articles.append(article_data)
-            # break
+            break
 
     return articles
 
@@ -112,6 +112,6 @@ if __name__ == '__main__':
         print("URL:", article['url'])
         print("Timestamp:", article['timestamp'])
         print("Author:", article['author'])
-        print("Category:", article['category'])  # Print the category of the article
-        print("Full Content:", article['content'][:1000], '...')  # print first 1000 chars
+        print("Category:", article['category'])  
+        print("Full Content:", article['content'][:1000], '...')  
         print('-' * 50)

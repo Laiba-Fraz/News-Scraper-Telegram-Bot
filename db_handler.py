@@ -1,19 +1,23 @@
+import os
+from dotenv import load_dotenv
 from supabase import create_client, Client
 
-# Replace with your actual Supabase URL and anon key
-url = "https://wnueyrkedgvddmpxiqol.supabase.co"
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudWV5cmtlZGd2ZGRtcHhpcW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5MzU5MDMsImV4cCI6MjA2NDUxMTkwM30.23nMoIlF89fC2XYzdVGCeiZLHgLrvDFjkILdE75_Lmw"
+# Load environment variables from .env file
+load_dotenv()
+
+# Access environment variables
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY") 
 
 supabase: Client = create_client(url, key)
 
 def insert_article(article_data):
-    # Include the category in the record dictionary
     record = {
         'title': article_data.get('title'),
         'url': article_data.get('url'),
         'published_at': article_data.get('timestamp'),
         'description': article_data.get('content'),
-        'category': article_data.get('category')  # Add category field to the record
+        'category': article_data.get('category') 
     }
 
     try:
@@ -36,7 +40,7 @@ def insert_article(article_data):
             print("❌ Error inserting article:", e)
             return None
 
-# FUNCTION TO COUNT ARTICLES
+# Count articles
 def get_article_count():
     try:
         response = supabase.table("articles").select("id", count="exact").execute()
@@ -45,6 +49,7 @@ def get_article_count():
         print("Error fetching article count:", e)
         return 0
 
+# Get filters from DB
 def get_filters_for_url(base_url):
     try:
         result = supabase.table("source_sites").select("filters").eq("base_url", base_url).execute()
@@ -57,12 +62,12 @@ def get_filters_for_url(base_url):
         print(f"❌ Error fetching filters for {base_url}: {e}")
         return []
 
-# FUNCTION TO FETCH CATEGORIES AND KEYWORDS DYNAMICALLY
+# Get categories and keywords from the database
 def get_categories_and_keywords():
     categories = {}
 
     # Query to get categories and keywords from Supabase
-    response = supabase.table('category_keywords').select('category, keywords').execute()  # Change 'keyword' to 'keywords'
+    response = supabase.table('category_keywords').select('category, keywords').execute() 
 
     if response.data:
         # Process each row and build the categories dictionary
@@ -73,6 +78,7 @@ def get_categories_and_keywords():
     
     return categories
 
+# Get article count for a specific category
 def get_article_count_by_category(category):
     """Fetch the current article count for a specific category."""
     try:
@@ -84,7 +90,7 @@ def get_article_count_by_category(category):
         print(f"❌ Error fetching article count for category {category}: {e}")
         return 0
 
-
+# Increment article count for a specific category
 def increment_article_count(category):
     try:
         # Increment article count for the given category
@@ -110,7 +116,7 @@ def increment_article_count(category):
     except Exception as e:
         print(f"❌ Error incrementing article count for category {category}: {e}")
 
-
+# Get quota percentage for a specific category
 def get_category_quota_percentage(category):
     """Get the quota percentage for a specific category."""
     try:
@@ -122,6 +128,7 @@ def get_category_quota_percentage(category):
         print(f"❌ Error fetching quota percentage for category {category}: {e}")
         return 0
 
+# Get total articles posted across all categories
 def get_total_articles_posted():
     try:
         # Fetch all category counts and sum them up
@@ -136,20 +143,6 @@ def get_total_articles_posted():
     except Exception as e:
         print(f"❌ Error fetching total posted articles: {e}")
         return 0
-
-# Reset all article counts for each category
-def reset_article_counts():
-    try:
-        # Reset article count to 0 for all categories
-        response = supabase.table("category_article_count").update({
-            'article_count': 0  # Reset all article counts to 0
-        }).execute()
-        
-        print("✅ All article counts have been reset.")
-        return response
-    except Exception as e:
-        print(f"❌ Error resetting article counts: {e}")
-        return None
 
 # Get the count of posts made today (or for a specific date).
 def get_daily_post_count(date=None):

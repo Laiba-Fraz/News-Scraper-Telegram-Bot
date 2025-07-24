@@ -75,7 +75,7 @@ def scrape_site3():
             if time_tag and time_tag.has_attr("datetime"):
                 timestamp = time_tag.get_text(strip=True)
 
-        # ✅ NEW: Fetch full article page to get full content
+        # Fetch full article page to get full content
         print(f"📄 Fetching article page: {full_url}")
         article_resp = requests.get(full_url, headers=headers)
         if article_resp.status_code == 200:
@@ -88,19 +88,19 @@ def scrape_site3():
         print(f"Title: {title}")
         print(f"URL: {full_url}")
         print(f"Timestamp: {timestamp}")
-        print(f"Content snippet: {content[:200]}...")  # Show a snippet
+        print(f"Content snippet: {content[:200]}...")  
         print("-" * 50)
 
         # Get the category for the article based on keywords
-        category = categorize_article(title, content)  # Categorize based on title and content
-        print(f"Category assigned: {category}")  # Debug print to verify category assignment
+        category = categorize_article(title, content)  
+        print(f"Category assigned: {category}") 
 
         article_data = {
             'title': title,
             'timestamp': timestamp,
             'url': full_url,
             'content': content,
-            'category': category  # Add category here
+            'category': category 
         }
 
         inserted = insert_article(article_data)
@@ -111,10 +111,10 @@ def scrape_site3():
                 'url': full_url,
                 'timestamp': timestamp,
                 'content': content,
-                'category': category,  # Include category in the inserted article data
+                'category': category, 
                 "base_url": "https://blockworks.co/news"
             })
-            break  # Optionally, remove this if you want to insert all articles
+            # break
 
     return inserted_articles
 

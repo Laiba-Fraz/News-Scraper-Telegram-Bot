@@ -5,27 +5,11 @@ TABLE_NAME = "apis"
 def get_all_apis():
     try:
         response = supabase.table(TABLE_NAME).select("*").execute()
-        print("Fetched APIs:", response.data)  # Debugging line
-        return response.data  # Should return a list of APIs
+        print("Fetched APIs:", response.data) 
+        return response.data 
     except Exception as e:
         print("Error in get_all_apis:", e)
         return []
-
-
-# def create_api(api):
-#     try:
-#         data = {
-#             "name": api.name,
-#             "url": api.url,
-#             "token": api.token
-#         }
-#         response = supabase.table(TABLE_NAME).insert(data).execute()
-#         if response.data:
-#             return response.data[0]
-#         return None
-#     except Exception as e:
-#         print("Error in create_api:", e)
-#         return None
 
 def update_api(api_id: int, name: str = None, url: str = None, token: str = None):
     try:
@@ -57,20 +41,6 @@ def get_all_source_sites():
         print("Error in get_all_source_sites:", e)
         return []
 
-# def create_source_site(site):
-#     try:
-#         data = {
-#             "name": site.name,
-#             "base_url": site.base_url,
-#             "filters": site.filters,
-#             "is_active": site.is_active
-#         }
-#         response = supabase.table("source_sites").insert(data).execute()
-#         return response.data[0] if response.data else None
-#     except Exception as e:
-#         print("Error in create_source_site:", e)
-#         return None
-
 def update_source_site(site_id: int, name: str = None, base_url: str = None, filters: str = None, is_active: bool = None):
     try:
         data = {}
@@ -94,6 +64,7 @@ def delete_source_site(site_id: int):
         return None
 
 # ---------- CHANNELS CRUD ----------
+
 def get_all_channels():
     try:
         response = supabase.table("channels").select("*").execute()
@@ -134,37 +105,7 @@ def delete_channel(channel_id: int):
         print("Error in delete_channel:", e)
         return None
 
-# ---------- POSTING HISTORY ----------
-# def get_all_posting_history():
-#     try:
-#         response = supabase.table("posting_history").select("*").execute()
-#         return response.data
-#     except Exception as e:
-#         print("Error in get_all_posting_history:", e)
-#         return []
-
-# def get_all_posting_history():
-#     try:
-#         response = (
-#             supabase
-#             .table("posting_history")
-#             .select("*")
-#             .order("posted_at", desc=True)  # Order by 'posted_at' in descending order
-#             .execute()
-#         )
-#         return response.data
-#     except Exception as e:
-#         print("Error in get_all_posting_history:", e)
-#         return []
-
-# def get_all_posting_history():
-#     try:
-#         response = supabase.table("posting_history").select("*").execute()
-#         data = response.data or []
-#         return data[::-1]  # Reverse the list to get newest first
-#     except Exception as e:
-#         print("Error in get_all_posting_history:", e)
-#         return []
+# ---------- POSTING HISTORY CRUD----------
 
 def get_all_posting_history():
     try:
@@ -180,16 +121,15 @@ def get_all_posting_history():
         print("Error in get_all_posting_history:", e)
         return []
 
-
 def add_posting_history(history):
     try:
         # Prepare data for insertion, including article_title and channel_name
         data = {
             "article_id": history.article_id,
             "channel_id": history.channel_id,
-            "article_url": history.article_url,  # Assuming you still want to insert article_url
-            "article_title": history.article_title,  # Assuming you get the title from frontend/form input
-            "channel_name": history.channel_name  # Assuming you get the channel name from frontend/form input
+            "article_url": history.article_url,  
+            "article_title": history.article_title,  
+            "channel_name": history.channel_name 
         }
 
         # Insert data into posting_history table
@@ -282,7 +222,6 @@ def delete_cookie(cookie_id: str):
         return None
 
 
-# ---------- CATEGORY KEYWORDS CRUD ----------
 # ---------- CATEGORY KEYWORDS CRUD ----------
 def get_all_category_keywords():
     try:

@@ -1,7 +1,13 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-BOT_TOKEN = "8042578096:AAE45y4mkGJDZA0lU5QG6pcfBa2Jr3NN6Dk"
-CHAT_ID = "7746827965"
+# Load environment variables from the .env file
+load_dotenv()
+
+# Retrieve the Telegram bot token and chat ID from environment variables
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 def send_telegram_message(title, url, timestamp, description):
     # Limit description length to avoid very long messages (optional)
